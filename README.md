@@ -1,2 +1,2 @@
-# study-netty-itstack
+# study netty
 netty study demo

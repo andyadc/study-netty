@@ -1,5 +1,11 @@
 package com.andyadc.netty.study;
 
+import com.andyadc.netty.study.in.client.CustomizeInboundClientHandler1;
+import com.andyadc.netty.study.in.client.CustomizeInboundClientHandler2;
+import com.andyadc.netty.study.in.client.CustomizeInboundClientHandler3;
+import com.andyadc.netty.study.out.client.CustomizeOutboundClientHandler1;
+import com.andyadc.netty.study.out.client.CustomizeOutboundClientHandler2;
+import com.andyadc.netty.study.out.client.CustomizeOutboundClientHandler3;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -21,7 +27,16 @@ public class NettyClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new CustomeClientHandler());
+
+                            // inbound
+                            socketChannel.pipeline().addLast(new CustomizeInboundClientHandler1());
+                            socketChannel.pipeline().addLast(new CustomizeInboundClientHandler2());
+                            socketChannel.pipeline().addLast(new CustomizeInboundClientHandler3());
+
+                            // outbound
+                            socketChannel.pipeline().addFirst(new CustomizeOutboundClientHandler1());
+                            socketChannel.pipeline().addFirst(new CustomizeOutboundClientHandler2());
+                            socketChannel.pipeline().addFirst(new CustomizeOutboundClientHandler3());
                         }
                     });
 

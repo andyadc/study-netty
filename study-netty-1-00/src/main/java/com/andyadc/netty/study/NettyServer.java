@@ -1,5 +1,11 @@
 package com.andyadc.netty.study;
 
+import com.andyadc.netty.study.in.server.CustomizeInboundServerHandler1;
+import com.andyadc.netty.study.in.server.CustomizeInboundServerHandler2;
+import com.andyadc.netty.study.in.server.CustomizeInboundServerHandler3;
+import com.andyadc.netty.study.out.server.CustomizeOutboundServerHandler1;
+import com.andyadc.netty.study.out.server.CustomizeOutboundServerHandler2;
+import com.andyadc.netty.study.out.server.CustomizeOutboundServerHandler3;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -10,9 +16,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-/**
- * https://mp.weixin.qq.com/s?__biz=MzU1OTgzNTAzNQ==&mid=2247483871&idx=1&sn=713a6e11422a815d9f98e1ccf71d19c2&chksm=fc10732bcb67fa3d111431e5ae9792b63a92e3758acf406046db1f95705850878383da22cab8&cur_album_id=1445826382487207937&scene=189#wechat_redirect
- */
 public class NettyServer {
 
     /**
@@ -42,7 +45,16 @@ public class NettyServer {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             //给pipeline管道设置处理器
-                            socketChannel.pipeline().addLast(new CustomeServerHandler());
+
+                            // inbound
+                            socketChannel.pipeline().addLast(new CustomizeInboundServerHandler1());
+                            socketChannel.pipeline().addLast(new CustomizeInboundServerHandler2());
+                            socketChannel.pipeline().addLast(new CustomizeInboundServerHandler3());
+
+                            // outbound
+                            socketChannel.pipeline().addFirst(new CustomizeOutboundServerHandler1());
+                            socketChannel.pipeline().addFirst(new CustomizeOutboundServerHandler2());
+                            socketChannel.pipeline().addFirst(new CustomizeOutboundServerHandler3());
                         }
                     });
 

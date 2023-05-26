@@ -13,6 +13,7 @@
         <module>study-netty-1-00</module>
         <module>netty-example</module>
         <module>nio-example</module>
+        <module>oio-example</module>
     </modules>
 
     <properties>

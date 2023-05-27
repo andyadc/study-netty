@@ -1,10 +1,15 @@
 package com.andyadc.nio.test;
 
+import com.andyadc.nio.example.utils.ByteBufferUtil;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -15,6 +20,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class ChannelTests {
+
+    private static final Logger logger = LoggerFactory.getLogger(ChannelTests.class);
 
     @Test
     public void testSocketChannel() throws Exception {
@@ -194,5 +201,71 @@ public class ChannelTests {
         inputStreamChannel.close();
 
         System.out.println("消耗时间: " + (System.currentTimeMillis() - start));
+    }
+
+    @Test
+    public void testFileChannel6() {
+        try (FileChannel fileChannel = new FileInputStream("nio.txt").getChannel()) {
+            ByteBuffer byteBuffer = ByteBuffer.allocate(10);
+            while (true) {
+                int read = fileChannel.read(byteBuffer);
+                logger.info("读取到字节数: {}", read);
+                if (read == -1) {
+                    break;
+                }
+                byteBuffer.flip();// 切换读模式
+                while (byteBuffer.hasRemaining()) {
+                    byte b = byteBuffer.get();
+                    logger.info("读取到的字节: {}", (char) b);
+                }
+//                byteBuffer.clear();// 切换写模式
+                byteBuffer.compact();// 切换写模式
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Scattering
+     */
+    @Test
+    public void testFileChannel7() {
+        // mode - r read
+        try (FileChannel fileChannel = new RandomAccessFile("nio.txt", "r").getChannel()) {
+            ByteBuffer buffer1 = ByteBuffer.allocate(10);
+            ByteBuffer buffer2 = ByteBuffer.allocate(10);
+            ByteBuffer buffer3 = ByteBuffer.allocate(6);
+            fileChannel.read(new ByteBuffer[]{buffer1, buffer2, buffer3});
+
+            buffer1.flip();
+            buffer2.flip();
+            buffer3.flip();
+
+            ByteBufferUtil.debugAll(buffer1);
+            ByteBufferUtil.debugAll(buffer2);
+            ByteBufferUtil.debugAll(buffer3);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Gathering
+     */
+    @Test
+    public void testFileChannel8() throws Exception {
+        ByteBuffer buffer1 = StandardCharsets.UTF_8.encode("abc");
+        ByteBuffer buffer2 = StandardCharsets.UTF_8.encode("123");
+        ByteBuffer buffer3 = StandardCharsets.UTF_8.encode("你好");
+
+        RandomAccessFile accessFile = new RandomAccessFile("nio2.txt", "rw");
+        FileChannel fileChannel = accessFile.getChannel();
+
+        long write = fileChannel.write(new ByteBuffer[]{buffer1, buffer2, buffer3});
+        System.out.println(write);
+
+        fileChannel.close();
     }
 }

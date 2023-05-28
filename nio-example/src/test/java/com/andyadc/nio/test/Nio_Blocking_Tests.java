@@ -9,6 +9,7 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class Nio_Blocking_Tests {
         SocketChannel socketChannel = SocketChannel.open();
         socketChannel.connect(new InetSocketAddress("127.0.0.1", 9997));
 
-//        socketChannel.write(ByteBuffer.wrap("hello nio".getBytes(StandardCharsets.UTF_8)));
+        socketChannel.write(ByteBuffer.wrap("hello nio\nhello nio\n".getBytes(StandardCharsets.UTF_8)));
 
         System.in.read();
     }

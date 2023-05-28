@@ -15,6 +15,19 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * selector.select 何时不 zus
+ * <p>
+ * 1. 事件发生时;
+ * 1). 客户端发送连接请求, 会触发accept 事件;
+ * 2). 客户端发送数据过来, 客户端正常/异常关闭时, 都会触发 read 事件, 另外如果发送的数据大于 buffer 缓冲区, 会多次触发 read 事件;
+ * 3). channel 可写, 会触发 write 事件;
+ * 4). 在 Linux 下 nio bug 发生时;
+ * 2. 调用selector.wakeup();
+ * 3. 调用selector.close();
+ * 4. selector 所在线程interrupt;
+ * </p>
+ */
 public class SelectorTests {
 
     private static final Logger logger = LoggerFactory.getLogger(SelectorTests.class);

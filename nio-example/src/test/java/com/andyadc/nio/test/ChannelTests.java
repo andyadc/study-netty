@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
@@ -267,5 +266,33 @@ public class ChannelTests {
         System.out.println(write);
 
         fileChannel.close();
+    }
+
+    @Test
+    public void testFileChannel9() {
+        try (
+                FileChannel from = new FileInputStream("nio.txt").getChannel();
+                FileChannel to = new FileOutputStream("nio3.txt").getChannel()
+        ) {
+            // 最大 2G 数据
+            from.transferTo(0, from.size(), to);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testFileChannel10() {
+        try (
+                FileChannel from = new FileInputStream("nio.txt").getChannel();
+                FileChannel to = new FileOutputStream("nio3.txt").getChannel()
+        ) {
+            long size = from.size();
+            for (long left = size; left > 0; ) {
+                left -= from.transferTo((size - left), left, to);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * selector.select 何时不 zus
+ * selector.select 何时不阻塞
  * <p>
  * 1. 事件发生时;
  * 1). 客户端发送连接请求, 会触发accept 事件;

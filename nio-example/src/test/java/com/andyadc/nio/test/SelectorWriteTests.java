@@ -23,7 +23,8 @@ public class SelectorWriteTests {
         SocketChannel socketChannel = SocketChannel.open();
 //        socketChannel.configureBlocking(false);
 
-        socketChannel.connect(new InetSocketAddress(9998));
+        socketChannel.connect(new InetSocketAddress("127.0.0.1", 9998));
+        logger.info("client connected. {}", socketChannel);
 
         // 接受数据
         int count = 0;
@@ -45,6 +46,7 @@ public class SelectorWriteTests {
         serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
         serverSocketChannel.bind(new InetSocketAddress("127.0.0.1", 9998));
+        logger.info("server bind. {}", serverSocketChannel);
 
         while (true) {
             selector.select();
@@ -68,21 +70,23 @@ public class SelectorWriteTests {
                         data.append("a");
                     }
                     ByteBuffer dataBuffer = StandardCharsets.UTF_8.encode(data.toString());
+//                    ByteBuffer dataBuffer = Charset.defaultCharset().encode(data.toString());
 
                     // 返回值代表实际写入数量
                     int writed = socketChannel.write(dataBuffer);
                     logger.info("Writed {}", writed);
 
-                    while (dataBuffer.hasRemaining()) {
+                    while (dataBuffer.hasRemaining()) { // TODO ? 无线循环, 始终大于0
+                        logger.info("remaining - {}", dataBuffer.remaining());
                         // 关注可写事件
                         key.interestOps(key.interestOps() | SelectionKey.OP_WRITE); // 添加
 
                         // 把未写完的数据放入SelectionKey
                         key.attach(dataBuffer);
+//                        break;
                     }
                 }
 
-                // TODO macos 不执行, Windows 下待测试
                 if (selectionKey.isWritable()) {
                     logger.info("Writable >>>");
                     ByteBuffer dataBuffer = (ByteBuffer) selectionKey.attachment();
@@ -95,8 +99,9 @@ public class SelectorWriteTests {
 
                     //清理
                     if (!dataBuffer.hasRemaining()) {
+                        logger.info("remove op_write");
                         selectionKey.attach(null); //内容写完, 需要清除 buffer
-                        selectionKey.interestOps(selectionKey.interestOps() & (~SelectionKey.OP_WRITE)); // 去除可写事件
+                        selectionKey.interestOps(selectionKey.interestOps() & ~SelectionKey.OP_WRITE); // 去除可写事件
                     }
                 }
             }

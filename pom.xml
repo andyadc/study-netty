@@ -14,6 +14,7 @@
         <module>netty-example</module>
         <module>nio-example</module>
         <module>oio-example</module>
+        <module>blackhorse</module>
     </modules>
 
     <properties>

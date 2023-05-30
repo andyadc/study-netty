@@ -8,6 +8,7 @@
     </appender>
 
     <logger name="com.andyadc" level="DEBUG"/>
+    <logger name="io.netty.handler.logging.LoggingHandler" level="DEBUG"/>
 
     <root level="info">
         <appender-ref ref="STDOUT"/>

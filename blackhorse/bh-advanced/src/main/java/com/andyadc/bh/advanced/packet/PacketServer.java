@@ -7,7 +7,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.FixedLengthFrameDecoder;
+import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
@@ -29,7 +29,13 @@ public class PacketServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel channel) throws Exception {
-                        channel.pipeline().addLast(new FixedLengthFrameDecoder(10));
+                        // 固定长度 - 粘包半包解决方案
+//                        channel.pipeline().addLast(new FixedLengthFrameDecoder(10));
+
+                        // 换行符 /n, /r/n 需要指定最大长度
+                        channel.pipeline().addLast(new LineBasedFrameDecoder(512));
+//                        channel.pipeline().addLast(new DelimiterBasedFrameDecoder(100, ByteBuf));
+
                         channel.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
                     }
                 });

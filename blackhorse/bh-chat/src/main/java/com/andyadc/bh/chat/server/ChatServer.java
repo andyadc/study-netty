@@ -37,7 +37,7 @@ public class ChatServer {
                         }
                     });
 
-            ChannelFuture channelFuture = serverBootstrap.bind(8080).sync();
+            ChannelFuture channelFuture = serverBootstrap.bind(9897).sync();
             logger.info("server started");
 
             channelFuture.channel().closeFuture().sync();

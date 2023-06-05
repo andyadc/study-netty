@@ -15,7 +15,7 @@ public class MessageCodecTests {
     @Test
     public void testMessageCodec() throws Exception {
         EmbeddedChannel channel = new EmbeddedChannel(
-                new LoggingHandler(LogLevel.DEBUG),
+                new LoggingHandler(LogLevel.DEBUG), // @Sharable 线程安全
                 new MessageCodec()
         );
 
@@ -40,7 +40,7 @@ public class MessageCodecTests {
     public void testMessageCodec2() throws Exception {
         EmbeddedChannel channel = new EmbeddedChannel(
                 new LoggingHandler(LogLevel.DEBUG),
-                // 粘包/半包
+                // 粘包/半包, 线程不安全
                 new LengthFieldBasedFrameDecoder(1024, 12, 4, 0, 0),
                 new MessageCodec()
         );

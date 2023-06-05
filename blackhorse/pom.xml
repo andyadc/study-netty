@@ -16,6 +16,7 @@
     <modules>
         <module>bh-starter</module>
         <module>bh-advanced</module>
+        <module>bh-chat</module>
     </modules>
 
     <properties>

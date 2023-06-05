@@ -11,8 +11,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.CharsetUtil;
 
-import java.nio.charset.StandardCharsets;
-
 public class RedisProtocolTests {
 
     /**
@@ -61,7 +59,7 @@ public class RedisProtocolTests {
                             @Override
                             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                                 ByteBuf byteBuf = (ByteBuf) msg;
-                                System.out.println(byteBuf.toString(StandardCharsets.UTF_8));
+                                System.out.println(byteBuf.toString(CharsetUtil.UTF_8));
                                 super.channelRead(ctx, msg);
                             }
                         });

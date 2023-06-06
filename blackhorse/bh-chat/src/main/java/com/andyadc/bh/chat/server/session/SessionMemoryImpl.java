@@ -2,16 +2,22 @@ package com.andyadc.bh.chat.server.session;
 
 import io.netty.channel.Channel;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class SessionMemoryImpl implements Session {
+
+    private static final Map<String, Channel> userChannel = new ConcurrentHashMap<>();
 
     @Override
     public void bind(Channel channel, String username) {
-
+        userChannel.put(username, channel);
     }
 
     @Override
     public void unbind(Channel channel) {
-
+        Collection<Channel> values = userChannel.values();
     }
 
     @Override
@@ -26,6 +32,6 @@ public class SessionMemoryImpl implements Session {
 
     @Override
     public Channel getChannel(String username) {
-        return null;
+        return userChannel.get(username);
     }
 }

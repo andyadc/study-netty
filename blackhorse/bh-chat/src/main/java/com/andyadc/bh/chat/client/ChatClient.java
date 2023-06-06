@@ -1,5 +1,7 @@
 package com.andyadc.bh.chat.client;
 
+import com.andyadc.bh.chat.protocol.ProtocolFrameDecoder;
+import com.andyadc.bh.chat.protocol.SharableMessageCodec;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -19,6 +21,7 @@ public class ChatClient {
         EventLoopGroup group = new NioEventLoopGroup();
 
         LoggingHandler loggingHandler = new LoggingHandler(LogLevel.DEBUG);
+        SharableMessageCodec messageCodec = new SharableMessageCodec();
 
         try {
             Bootstrap bootstrap = new Bootstrap()
@@ -27,9 +30,14 @@ public class ChatClient {
                     .handler(new ChannelInitializer<NioSocketChannel>() {
                         @Override
                         protected void initChannel(NioSocketChannel channel) throws Exception {
+                            channel.pipeline().addLast(new ProtocolFrameDecoder());
                             channel.pipeline().addLast(loggingHandler);
+                            channel.pipeline().addLast(messageCodec);
+
+                            channel.pipeline().addLast("client-handler", new ClientHandler());
                         }
                     });
+
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 9897).sync();
             logger.info("client started");
 

@@ -23,6 +23,6 @@ public class UserServiceMemoryImpl implements UserService {
     public boolean login(String username, String password) {
         logger.info("username: {}", username);
         String pass = USER_MAP.get(username);
-        return pass.equals(password);
+        return (pass != null && pass.length() > 0) && pass.equals(password);
     }
 }

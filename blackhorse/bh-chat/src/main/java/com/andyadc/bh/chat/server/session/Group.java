@@ -35,4 +35,12 @@ public class Group {
     public void setMembers(Set<String> members) {
         this.members = members;
     }
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "name=" + name +
+                ", members=" + members +
+                '}';
+    }
 }

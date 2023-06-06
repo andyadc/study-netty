@@ -116,4 +116,16 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         }
         super.channelRead(ctx, msg);
     }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        logger.info("disconnect by server");
+        super.channelInactive(ctx);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        logger.warn("error happened {}", cause.getMessage());
+        super.exceptionCaught(ctx, cause);
+    }
 }

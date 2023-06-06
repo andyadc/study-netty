@@ -21,6 +21,9 @@ public abstract class Message implements Serializable {
     public static final int GroupMembersRequestMessage = 12;
     public static final int GroupMembersResponseMessage = 13;
 
+    public static final int PingMessage = 14;
+    public static final int PongMessage = 15;
+
     private static final Map<Integer, Class<?>> messageClasses = new ConcurrentHashMap<>();
 
     private static final long serialVersionUID = 3732616785539386095L;

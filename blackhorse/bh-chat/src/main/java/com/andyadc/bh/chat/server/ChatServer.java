@@ -11,13 +11,18 @@ import com.andyadc.bh.chat.server.handler.GroupQuitHandler;
 import com.andyadc.bh.chat.server.handler.LoginHandler;
 import com.andyadc.bh.chat.server.handler.QuitHandler;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,9 +53,25 @@ public class ChatServer {
                     .childHandler(new ChannelInitializer<NioSocketChannel>() {
                         @Override
                         protected void initChannel(NioSocketChannel channel) throws Exception {
+
                             channel.pipeline().addLast(new ProtocolFrameDecoder());
                             channel.pipeline().addLast(loggingHandler);
                             channel.pipeline().addLast(messageCodec);
+
+                            // 判断是否 读空闲时间过长或者写空闲时间过长
+                            channel.pipeline().addLast(new IdleStateHandler(10, 0, 0));
+                            channel.pipeline().addLast(new ChannelDuplexHandler() {
+                                // 用来触发特殊事件
+                                @Override
+                                public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+                                    IdleStateEvent event = (IdleStateEvent) evt;
+                                    // 触发读空闲事件
+                                    if (event.state() == IdleState.READER_IDLE) {
+                                        logger.info("read no data exceed");
+                                        ctx.channel().close();
+                                    }
+                                }
+                            });
 
                             channel.pipeline().addLast(loginHandler);
                             channel.pipeline().addLast(chatHandler);

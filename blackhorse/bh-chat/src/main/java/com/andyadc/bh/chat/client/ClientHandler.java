@@ -80,6 +80,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
                         break;
                     case "gcreate":
                         Set<String> members = new HashSet<>(Arrays.asList(s[2].split(",")));
+                        members.add(username);
                         GroupCreateRequestMessage groupCreateRequestMessage = new GroupCreateRequestMessage(s[1], members);
                         ctx.writeAndFlush(groupCreateRequestMessage);
                         break;

@@ -9,6 +9,7 @@ import com.andyadc.bh.chat.server.handler.GroupJoinHandler;
 import com.andyadc.bh.chat.server.handler.GroupMembersHandler;
 import com.andyadc.bh.chat.server.handler.GroupQuitHandler;
 import com.andyadc.bh.chat.server.handler.LoginHandler;
+import com.andyadc.bh.chat.server.handler.QuitHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -38,6 +39,7 @@ public class ChatServer {
         GroupJoinHandler groupJoinHandler = new GroupJoinHandler();
         GroupMembersHandler groupMembersHandler = new GroupMembersHandler();
         GroupQuitHandler groupQuitHandler = new GroupQuitHandler();
+        QuitHandler quitHandler = new QuitHandler();
 
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap()
@@ -57,6 +59,7 @@ public class ChatServer {
                             channel.pipeline().addLast(groupJoinHandler);
                             channel.pipeline().addLast(groupMembersHandler);
                             channel.pipeline().addLast(groupQuitHandler);
+                            channel.pipeline().addLast(quitHandler);
 
                         }
                     });

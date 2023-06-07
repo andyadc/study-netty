@@ -13,10 +13,12 @@
     <description>
         black horse
     </description>
+
     <modules>
         <module>bh-starter</module>
         <module>bh-advanced</module>
         <module>bh-chat</module>
+        <module>bh-rpc</module>
     </modules>
 
     <properties>

@@ -6,6 +6,7 @@ public class GroupCreateRequestMessage extends Message {
 
     private static final long serialVersionUID = 3193734443179579235L;
 
+    private String creator;
     private String groupName;
     private Set<String> members;
 
@@ -15,6 +16,14 @@ public class GroupCreateRequestMessage extends Message {
     public GroupCreateRequestMessage(String groupName, Set<String> members) {
         this.groupName = groupName;
         this.members = members;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public String getGroupName() {
@@ -36,5 +45,14 @@ public class GroupCreateRequestMessage extends Message {
     @Override
     public int getMessageType() {
         return GroupCreateRequestMessage;
+    }
+
+    @Override
+    public String toString() {
+        return "GroupCreateRequestMessage{" +
+                "creator=" + creator +
+                ", groupName=" + groupName +
+                ", members=" + members +
+                "} " + super.toString();
     }
 }

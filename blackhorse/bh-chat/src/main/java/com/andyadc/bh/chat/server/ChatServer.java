@@ -67,7 +67,7 @@ public class ChatServer {
                                     IdleStateEvent event = (IdleStateEvent) evt;
                                     // 触发读空闲事件
                                     if (event.state() == IdleState.READER_IDLE) {
-                                        logger.info("read no data exceed");
+                                        logger.warn("read no data exceed");
                                         ctx.channel().close();
                                     }
                                 }

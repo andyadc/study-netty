@@ -25,4 +25,11 @@ public class GroupMembersRequestMessage extends Message {
     public int getMessageType() {
         return GroupMembersRequestMessage;
     }
+
+    @Override
+    public String toString() {
+        return "GroupMembersRequestMessage{" +
+                "groupName='" + groupName +
+                "} " + super.toString();
+    }
 }

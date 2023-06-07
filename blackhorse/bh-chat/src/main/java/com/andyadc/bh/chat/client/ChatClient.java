@@ -49,7 +49,7 @@ public class ChatClient {
                                     IdleStateEvent event = (IdleStateEvent) evt;
                                     // 触发写空闲事件
                                     if (event.state() == IdleState.WRITER_IDLE) {
-                                        logger.info("write no data exceed");
+//                                        logger.info("write no data exceed");
                                         ctx.channel().writeAndFlush(new PingMessage());
                                     }
                                 }

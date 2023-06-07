@@ -64,7 +64,7 @@ public abstract class Message implements Serializable {
 
     @Override
     public String toString() {
-        return "Message{" +
+        return " {" +
                 "sequenceId=" + sequenceId +
                 ", messageType=" + messageType +
                 '}';

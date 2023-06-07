@@ -17,9 +17,4 @@ public class LoginResponseMessage extends AbstractResponseMessage {
     public int getMessageType() {
         return LoginResponseMessage;
     }
-
-    @Override
-    public String toString() {
-        return "LoginResponseMessage{} " + super.toString();
-    }
 }

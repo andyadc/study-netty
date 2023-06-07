@@ -25,4 +25,11 @@ public class GroupCreateResponseMessage extends AbstractResponseMessage {
     public int getMessageType() {
         return GroupCreateResponseMessage;
     }
+
+    @Override
+    public String toString() {
+        return "GroupCreateResponseMessage{" +
+                "groupName=" + groupName +
+                "} " + super.toString();
+    }
 }

@@ -30,6 +30,8 @@ public class GroupCreateHandler extends SimpleChannelInboundHandler<GroupCreateR
             ctx.writeAndFlush(groupCreateResponseMessage);
             return;
         }
+
+        groupCreateResponseMessage.setMessage("Create group [" + groupName + "] success, creator is " + msg.getCreator());
         groupCreateResponseMessage.setSuccess(true);
         ctx.writeAndFlush(groupCreateResponseMessage);
 

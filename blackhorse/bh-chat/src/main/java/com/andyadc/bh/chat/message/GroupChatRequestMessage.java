@@ -45,4 +45,13 @@ public class GroupChatRequestMessage extends Message {
     public int getMessageType() {
         return GroupChatRequestMessage;
     }
+
+    @Override
+    public String toString() {
+        return "GroupChatRequestMessage{" +
+                "from=" + from +
+                ", groupName=" + groupName +
+                ", content=" + content +
+                "} " + super.toString();
+    }
 }

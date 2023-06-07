@@ -2,10 +2,11 @@ package com.andyadc.bh.chat.message;
 
 public abstract class AbstractResponseMessage extends Message {
 
-    private static final long serialVersionUID = 191381680796394339L;
+    private static final long serialVersionUID = -6224736913638259671L;
 
     private boolean success;
     private String error;
+    private String message;
 
     public boolean isSuccess() {
         return success;
@@ -13,6 +14,14 @@ public abstract class AbstractResponseMessage extends Message {
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getError() {
@@ -28,6 +37,7 @@ public abstract class AbstractResponseMessage extends Message {
         return " {" +
                 "success=" + success +
                 ", error=" + error +
+                ", message=" + message +
                 "} " + super.toString();
     }
 }

@@ -35,4 +35,12 @@ public class GroupJoinRequestMessage extends Message {
     public int getMessageType() {
         return GroupJoinRequestMessage;
     }
+
+    @Override
+    public String toString() {
+        return "GroupJoinRequestMessage{" +
+                "username=" + username +
+                ", groupName=" + groupName +
+                "} " + super.toString();
+    }
 }

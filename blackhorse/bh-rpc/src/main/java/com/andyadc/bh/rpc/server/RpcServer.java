@@ -2,6 +2,7 @@ package com.andyadc.bh.rpc.server;
 
 import com.andyadc.bh.rpc.protocol.ProtocolFrameDecoder;
 import com.andyadc.bh.rpc.protocol.SharableMessageCodec;
+import com.andyadc.bh.rpc.server.handler.RpcServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -23,6 +24,7 @@ public class RpcServer {
 
         LoggingHandler loggingHandler = new LoggingHandler(LogLevel.DEBUG);
         SharableMessageCodec messageCodec = new SharableMessageCodec();
+        RpcServerHandler rpcServerHandler = new RpcServerHandler();
 
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap()
@@ -34,6 +36,7 @@ public class RpcServer {
                             channel.pipeline().addLast(new ProtocolFrameDecoder());
                             channel.pipeline().addLast(loggingHandler);
                             channel.pipeline().addLast(messageCodec);
+                            channel.pipeline().addLast(rpcServerHandler);
 
                         }
                     });

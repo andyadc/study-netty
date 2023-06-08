@@ -1,5 +1,6 @@
 package com.andyadc.bh.rpc.client;
 
+import com.andyadc.bh.rpc.message.RpcRequestMessage;
 import com.andyadc.bh.rpc.protocol.ProtocolFrameDecoder;
 import com.andyadc.bh.rpc.protocol.SharableMessageCodec;
 import io.netty.bootstrap.Bootstrap;
@@ -22,6 +23,7 @@ public class RpcClient {
 
         LoggingHandler loggingHandler = new LoggingHandler(LogLevel.DEBUG);
         SharableMessageCodec messageCodec = new SharableMessageCodec();
+        RpcClientHandler rpcClientHandler = new RpcClientHandler();
 
         try {
             Bootstrap bootstrap = new Bootstrap()
@@ -33,12 +35,22 @@ public class RpcClient {
                             channel.pipeline().addLast(new ProtocolFrameDecoder());
                             channel.pipeline().addLast(loggingHandler);
                             channel.pipeline().addLast(messageCodec);
+                            channel.pipeline().addLast(rpcClientHandler);
 
                         }
                     });
 
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 9897).sync();
             logger.info("client started");
+
+            // test
+            RpcRequestMessage message = new RpcRequestMessage();
+            message.setClassName("com.andyadc.bh.rpc.server.service.HelloService");
+            message.setMethodName("hello");
+            message.setParameterTypes(new Class[]{String.class});
+            message.setParameterValues(new Object[]{"netty"});
+            message.setReturnType(String.class);
+            channelFuture.channel().writeAndFlush(message);
 
             channelFuture.channel().closeFuture().sync();
             logger.info("client closed");

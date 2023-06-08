@@ -57,7 +57,8 @@ public class SharableMessageCodec extends MessageToMessageCodec<ByteBuf, Message
         byte[] bytes = new byte[length];
         in.readBytes(bytes, 0, length);
 
-        Message message = Serializer.Type.Json.deserialize(bytes, Message.class);
+        Class<?> messageClass = Message.getMessageClass(messageType);
+        Message message = Serializer.Type.Json.deserialize(bytes, messageClass);
 
         logger.info("{} - {} - {} - {} - {} - {} ", magicNum, version, serializationType, messageType, sequenceId, length);
         logger.info("{}", message);

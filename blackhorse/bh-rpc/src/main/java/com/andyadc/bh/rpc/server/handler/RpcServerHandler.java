@@ -46,7 +46,7 @@ public class RpcServerHandler extends SimpleChannelInboundHandler<RpcRequestMess
 
             response.setResult(invoke);
         } catch (Exception e) {
-            response.setError(e.getMessage());
+            response.setError("server error: " + e.getCause().getMessage());
             logger.error("rpc handle error", e);
         }
         ctx.writeAndFlush(response);

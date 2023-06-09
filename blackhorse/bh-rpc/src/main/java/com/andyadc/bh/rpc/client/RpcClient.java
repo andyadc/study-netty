@@ -11,6 +11,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +52,15 @@ public class RpcClient {
             message.setParameterTypes(new Class[]{String.class});
             message.setParameterValues(new Object[]{"netty"});
             message.setReturnType(String.class);
-            channelFuture.channel().writeAndFlush(message);
+            ChannelFuture future = channelFuture.channel().writeAndFlush(message);
+            future.addListener(new GenericFutureListener<Future<? super Void>>() {
+                @Override
+                public void operationComplete(Future<? super Void> future) throws Exception {
+                    if (future.isSuccess()) {
+                        logger.warn("error", future.cause());
+                    }
+                }
+            });
 
             channelFuture.channel().closeFuture().sync();
             logger.info("client closed");

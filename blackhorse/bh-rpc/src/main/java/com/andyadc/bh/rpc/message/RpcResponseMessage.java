@@ -27,4 +27,12 @@ public class RpcResponseMessage extends Message {
     public int getMessageType() {
         return ResponseMessage;
     }
+
+    @Override
+    public String toString() {
+        return "RpcResponseMessage{" +
+                "error=" + error +
+                ", result=" + result +
+                "} " + super.toString();
+    }
 }

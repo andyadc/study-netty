@@ -38,4 +38,12 @@ public abstract class Message implements Serializable {
     public static Class<? extends Message> getMessageClass(int messageType) {
         return messageClasses.get(messageType);
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "sequenceId=" + sequenceId +
+                ", messageType=" + messageType +
+                '}';
+    }
 }
